@@ -1,2 +1,2 @@
 ## Escape Window
-it rus away from mouse pointer and it increases when it is killed.
+It rus away from mouse pointer and it increases when it is killed.
