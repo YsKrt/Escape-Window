@@ -1,0 +1,96 @@
+var li: list<@runwnd>
+var a: @runwnd
+func main()
+	
+	do @a :: #@runwnd
+	do @a.make()
+	do @li :: #list<@runwnd>
+	do @li.add(@a)
+	
+	while(wnd@act())
+		
+		do @li.head()
+		while(!@li.term())
+			var item: @runwnd :: @li.get()
+			do item.use()
+			
+			do item.w.onClose :: f
+			
+			do @li.next()
+		end while
+		
+	end while
+	
+	func f(wii: wnd@WndBase): bool
+		do @a.zombi(&@li)
+		do dbg@print("Hello")
+	end func
+	
+end func
+
+class runwnd()
+	
+	var mx: int
+	var my: int
+	var sw: int
+	var sh: int
+	var veloX: int
+	var veloY: int
+	var x: int
+	var y: int
+	var width: int
+	var height: int
+	var time: int
+	+var w: wnd@Wnd
+	*func ctor()
+		
+		do me.x :: 300
+		do me.y :: 300
+		do me.veloX :: 0
+		do me.veloY :: 0
+		do me.width :: 100
+		do me.height :: 100
+		do wnd@screenSize(&me.sw, &me.sh)
+	end func
+	
+	+func make()
+		do me.w :: wnd@makeWnd(null, %normal, 800, 450, "Title")
+	end func
+	
+	+func use()
+		
+		do me.time :+ 1
+		if(me.time > 3000)
+			do me.w.exit()
+		end if
+		do me.w.setPos(me.x, me.y, me.width, me.height)
+		do input@mousePos(&me.mx, &me.my)
+		
+		if((me.x - me.mx).abs() < 500 & (me.y - me.my).abs() < 500 & me.x - me.mx <> 0 & me.y - me.my <> 0)
+			
+			do me.veloX :: 500 / (me.x - me.mx)
+			do me.veloY :: 500 / (me.y - me.my)
+			
+		end if
+		if(me.x < 0 | me.x > me.sw)
+			do me.veloX :: -me.veloX
+		end if
+		if(me.y < 0 | me.y > me.sh)
+			do me.veloY :: -me.veloY
+		end if
+		
+		do me.x :+ me.veloX
+		do me.y :+ me.veloY
+	end func
+	
+	+func zombi(li: &list<@runwnd>)
+		
+		var b: @runwnd :: #@runwnd
+		do b.make()
+		do li.add(b)
+		
+	end func
+	
+	
+	
+end class
